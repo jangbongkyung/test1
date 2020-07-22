@@ -5,6 +5,7 @@ class FASTA:
         self.file_name = file_name
         self.count={}
         self.length=0
+        
     
     def count_base(self):
         with open(self.file_name,'r')as handle:
@@ -27,6 +28,7 @@ class FASTQ:
     def __init__(self,file_name:str):
         self.file_name=file_name
         self.read_num=0
+        self.base={}
     def count_read_num(self):
         cnt=0
         with open(self.file_name,'r') as handle:
@@ -36,6 +38,11 @@ class FASTQ:
                     self.read_num +=1
                 elif cnt %4==1:
                     seq=line.strip()
+                    for s in seq:
+                        if s in self.base:
+                            self.base[s] +=1
+                        else:
+                            self.base[s] =1
                 elif cnt %4==3:
                     qual= line.strip()
                 cnt +=1
@@ -45,11 +52,12 @@ if __name__=="__main__":
         print(f"#usage: python{sys.argv[0]}[fasta]")
         sys.exit()
     file_name=sys.argv[1]
-    #t=FASTQ(file_name)
-    #t.count_read_num()
-    #print(t.read_num)
-    t=FASTA(file_name)
-    t.count_base()
-    print(t.count)
-    len(t)
-    print(t.length)
+    t=FASTQ(file_name)
+    t.count_read_num()
+    print(t.read_num)
+    print(t.base)
+    #t=FASTA(file_name)
+    #t.count_base()
+    #print(t.count)
+    #len(t)
+    #print(t.length)
